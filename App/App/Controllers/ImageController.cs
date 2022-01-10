@@ -16,11 +16,13 @@ public class ImageController : Controller
     }
 
     [HttpGet]
-    public FileResult Index()
+    [Route("{docId}/{fileName}")]
+    public FileResult Index(string docId, string fileName)
     {
         using var session = _store.OpenSession();
 
-        using var attachment = session.Advanced.Attachments.Get("employees/8-A", "photo.jpg");
+        string decodedDocId = Uri.UnescapeDataString(docId);
+        using var attachment = session.Advanced.Attachments.Get(decodedDocId, fileName);
 
         Stream stream = attachment.Stream;
         MemoryStream ms = new MemoryStream();
