@@ -4,6 +4,7 @@ using Raven.Client.Documents;
 
 namespace App.Controllers;
 
+[ApiController]
 [Route("[controller]")]
 public class ImageController : Controller
 {
@@ -14,6 +15,7 @@ public class ImageController : Controller
         _store = store;
     }
 
+    [HttpGet]
     public FileResult Index()
     {
         using var session = _store.OpenSession();
