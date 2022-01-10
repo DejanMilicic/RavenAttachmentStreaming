@@ -24,6 +24,6 @@ public class ImageController : Controller
         MemoryStream ms = new MemoryStream();
         stream.CopyTo(ms);
 
-        return File(ms.ToArray(), "image/jpg");
+        return File(ms.ToArray(), attachment.Details.ContentType);
     }
 }
