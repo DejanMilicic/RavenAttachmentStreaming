@@ -17,17 +17,24 @@ public class ImageController : Controller
 
     [HttpGet]
     [Route("{docId}/{fileName}")]
-    public FileResult Index(string docId, string fileName)
+    public IActionResult Index(string docId, string fileName)
     {
-        using var session = _store.OpenSession();
+        try
+        {
+            using var session = _store.OpenSession();
 
-        string decodedDocId = Uri.UnescapeDataString(docId);
-        using var attachment = session.Advanced.Attachments.Get(decodedDocId, fileName);
+            string decodedDocId = Uri.UnescapeDataString(docId);
+            using var attachment = session.Advanced.Attachments.Get(decodedDocId, fileName);
 
-        Stream stream = attachment.Stream;
-        MemoryStream ms = new MemoryStream();
-        stream.CopyTo(ms);
+            Stream stream = attachment.Stream;
+            MemoryStream ms = new MemoryStream();
+            stream.CopyTo(ms);
 
-        return File(ms.ToArray(), attachment.Details.ContentType);
+            return File(ms.ToArray(), attachment.Details.ContentType);
+        }
+        catch
+        {
+            return NotFound();
+        }
     }
 }
